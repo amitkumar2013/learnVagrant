@@ -1,0 +1,33 @@
+Install:
+========
+brew cask install virtualbox
+brew cask install vagrant
+brew cask install vagrant-manager
+vagrant plugin install vagrant-sshfs
+vagrant -v
+
+vagrant up | box list | ssh | remove (delete)| destroy (shutdown)
+
+1) Storage [fixed or dyamic]
+	a) virtual hard disk - using a Disk Image Files (VDI, VMDK, VHD, HDD).
+	b) attach iSCSI storage servers
+	c) share from host
+[hard disk controller - types IDE, SATA (AHCI), SCSI, SAS, USB-based, NVMe and virtio-scsi mass storage devices]
+[virtual storage slots]	
+	a) 4 slots to traditional IDE controller [AVOID]
+	b) 30 SATA c) 15 SCSI d) 255 SAS [PREFER]
+	e) 8 USB f) 255 nVM 7 g) 256 V-SCSI 
+
+$ VBoxManage internalcommands listpartitions -rawdisk /dev/sda
+$ VBoxManage internalcommands createrawvmdk -filename /path/to/file.vmdk -rawdisk /dev/sda -partitions 1,5
+
+2) Network
+	eight virtual PCI Ethernet cards [only 4 from UI rest from VBoxManage modifyvm].
+	PCNet FAST III [default - universal]
+	a) Not attached b) NAT [default] c) NAT Network [outbound]
+	d) Bridged [running servers in a guest]-bypass host e) Internal [private]
+	f) Host-only g) Generic [avoid]
+
+	d,f - both ways; b,c - needs port forwarding; d - internet as well.
+
+$ VBoxManage modifyvm VM_name --<virtual-network-adapter> nat
